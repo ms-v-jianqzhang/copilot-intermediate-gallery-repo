@@ -15,9 +15,9 @@ export default function Home() {
       {/* Feature Cards Section */}
       <div className="container mx-auto px-4 mb-16">
         <div className="grid md:grid-cols-3 gap-8">
-          {featureCardsData.map((feature, index) => (
+          {featureCardsData.map((feature) => (
             <FeatureCard
-              key={index}
+              key={feature.title}
               icon={feature.icon}
               title={feature.title}
               description={feature.description}
