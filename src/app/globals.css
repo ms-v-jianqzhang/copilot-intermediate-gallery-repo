@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode (used by next-themes) */
+@custom-variant dark (&:is(.dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -9,8 +12,13 @@
   --font-sans: var(--font-geist-sans);
 }
 
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
@@ -27,8 +35,12 @@ body {
   background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
 }
 
+.dark .page-gradient {
+  background: linear-gradient(to bottom right, #0f172a, #1e293b);
+}
+
 @media (prefers-color-scheme: dark) {
-  .page-gradient {
+  :root:not(.light) .page-gradient {
     background: linear-gradient(to bottom right, #0f172a, #1e293b);
   }
 }
@@ -45,9 +57,13 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .card-base {
+  :root:not(.light) .card-base {
     background-color: #1e293b;
   }
+}
+
+.dark .card-base {
+  background-color: #1e293b;
 }
 
 .card-elevated {
@@ -62,9 +78,13 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .card-elevated {
+  :root:not(.light) .card-elevated {
     background-color: #1e293b;
   }
+}
+
+.dark .card-elevated {
+  background-color: #1e293b;
 }
 
 .card-feature {
@@ -75,9 +95,13 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .card-feature {
+  :root:not(.light) .card-feature {
     background-color: #1e293b;
   }
+}
+
+.dark .card-feature {
+  background-color: #1e293b;
 }
 
 .card-stats {
@@ -88,9 +112,13 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .card-stats {
+  :root:not(.light) .card-stats {
     background-color: #1e293b;
   }
+}
+
+.dark .card-stats {
+  background-color: #1e293b;
 }
 
 /* Button Patterns */
@@ -125,14 +153,23 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .btn-secondary {
+  :root:not(.light) .btn-secondary {
     border-color: #4b5563;
     color: #d1d5db;
   }
   
-  .btn-secondary:hover {
+  :root:not(.light) .btn-secondary:hover {
     background-color: #374151;
   }
+}
+
+.dark .btn-secondary {
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #374151;
 }
 
 .btn-icon {
@@ -169,13 +206,21 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .nav-link {
+  :root:not(.light) .nav-link {
     color: #d1d5db;
   }
   
-  .nav-link:hover {
+  :root:not(.light) .nav-link:hover {
     color: #ffffff;
   }
+}
+
+.dark .nav-link {
+  color: #d1d5db;
+}
+
+.dark .nav-link:hover {
+  color: #ffffff;
 }
 
 .nav-link-active {
@@ -212,16 +257,27 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .form-input,
-  .form-select {
+  :root:not(.light) .form-input,
+  :root:not(.light) .form-select {
     border-color: #4b5563;
     background-color: #374151;
     color: #ffffff;
   }
   
-  .form-input::placeholder {
+  :root:not(.light) .form-input::placeholder {
     color: #9ca3af;
   }
+}
+
+.dark .form-input,
+.dark .form-select {
+  border-color: #4b5563;
+  background-color: #374151;
+  color: #ffffff;
+}
+
+.dark .form-input::placeholder {
+  color: #9ca3af;
 }
 
 /* Status Elements */
@@ -250,20 +306,35 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .status-active {
+  :root:not(.light) .status-active {
     background-color: #14532d;
     color: #bbf7d0;
   }
   
-  .status-private {
+  :root:not(.light) .status-private {
     background-color: #581c87;
     color: #e9d5ff;
   }
   
-  .status-draft {
+  :root:not(.light) .status-draft {
     background-color: #9a3412;
     color: #fed7aa;
   }
+}
+
+.dark .status-active {
+  background-color: #14532d;
+  color: #bbf7d0;
+}
+
+.dark .status-private {
+  background-color: #581c87;
+  color: #e9d5ff;
+}
+
+.dark .status-draft {
+  background-color: #9a3412;
+  color: #fed7aa;
 }
 
 /* Color System Classes */
@@ -315,11 +386,16 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .icon-container-blue { background-color: #1e3a8a; }
-  .icon-container-green { background-color: #14532d; }
-  .icon-container-purple { background-color: #581c87; }
-  .icon-container-orange { background-color: #9a3412; }
+  :root:not(.light) .icon-container-blue { background-color: #1e3a8a; }
+  :root:not(.light) .icon-container-green { background-color: #14532d; }
+  :root:not(.light) .icon-container-purple { background-color: #581c87; }
+  :root:not(.light) .icon-container-orange { background-color: #9a3412; }
 }
+
+.dark .icon-container-blue { background-color: #1e3a8a; }
+.dark .icon-container-green { background-color: #14532d; }
+.dark .icon-container-purple { background-color: #581c87; }
+.dark .icon-container-orange { background-color: #9a3412; }
 
 /* Hover Patterns */
 .hover-lift {
@@ -343,9 +419,13 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .hover-bg:hover {
+  :root:not(.light) .hover-bg:hover {
     background-color: rgba(55, 65, 81, 0.5);
   }
+}
+
+.dark .hover-bg:hover {
+  background-color: rgba(55, 65, 81, 0.5);
 }
 
 /* Progress Bar */
@@ -364,9 +444,13 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .progress-bar {
+  :root:not(.light) .progress-bar {
     background-color: #374151;
   }
+}
+
+.dark .progress-bar {
+  background-color: #374151;
 }
 
 /* Drag and Drop */
@@ -389,17 +473,29 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .drop-zone {
+  :root:not(.light) .drop-zone {
     border-color: #4b5563;
   }
   
-  .drop-zone-active {
+  :root:not(.light) .drop-zone-active {
     background-color: rgba(59, 130, 246, 0.1);
   }
   
-  .drop-zone-inactive:hover {
+  :root:not(.light) .drop-zone-inactive:hover {
     border-color: #3b82f6;
   }
+}
+
+.dark .drop-zone {
+  border-color: #4b5563;
+}
+
+.dark .drop-zone-active {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.dark .drop-zone-inactive:hover {
+  border-color: #3b82f6;
 }
 
 /* Table Patterns */
@@ -413,13 +509,21 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .table-row {
+  :root:not(.light) .table-row {
     border-color: #374151;
   }
   
-  .table-row:hover {
+  :root:not(.light) .table-row:hover {
     background-color: rgba(55, 65, 81, 0.5);
   }
+}
+
+.dark .table-row {
+  border-color: #374151;
+}
+
+.dark .table-row:hover {
+  background-color: rgba(55, 65, 81, 0.5);
 }
 
 /* Additional Button Variations */
@@ -452,7 +556,11 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .gallery-card {
+  :root:not(.light) .gallery-card {
     background-color: #1e293b;
   }
+}
+
+.dark .gallery-card {
+  background-color: #1e293b;
 }
