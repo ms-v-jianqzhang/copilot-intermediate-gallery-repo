@@ -109,5 +109,38 @@ export const mockPhotos: Photo[] = [
     views: 4321,
     photographer: 'Tom Anderson',
     dateTaken: '2023-12-20'
+  },
+  {
+    id: '10',
+    url: '/placeholder-10.jpg',
+    title: 'Golden Hour Harbor',
+    tags: ['landscape', 'harbor', 'sunset', 'travel'],
+    likes: 286,
+    downloads: 104,
+    views: 3187,
+    photographer: 'Maya Collins',
+    dateTaken: '2026-05-22'
+  },
+  {
+    id: '11',
+    url: '/placeholder-11.jpg',
+    title: 'Studio Fashion Editorial',
+    tags: ['portrait', 'studio', 'fashion', 'professional'],
+    likes: 341,
+    downloads: 128,
+    views: 3724,
+    photographer: 'Nolan Reeves',
+    dateTaken: '2026-04-14'
+  },
+  {
+    id: '12',
+    url: '/placeholder-12.jpg',
+    title: 'Glass Tower Reflections',
+    tags: ['architecture', 'city', 'reflection', 'building'],
+    likes: 219,
+    downloads: 83,
+    views: 2461,
+    photographer: 'Priya Nair',
+    dateTaken: '2026-03-08'
   }
 ];
