@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { Heart, Download, Share2, Eye, Tag } from 'lucide-react';
+import { useRef, useState } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { Heart, Download, Share2, Eye, Tag, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Photo, mockPhotos } from '@/lib/mock-photo-data';
 
@@ -15,9 +16,9 @@ interface GalleryGridProps {
   currentPage?: number;
 }
 
-export function GalleryGrid({ 
-  limit = 6, 
-  className = "", 
+export function GalleryGrid({
+  limit = 6,
+  className = "",
   onLoadMore,
   isLoading = false,
   selectedTags = [],
@@ -26,19 +27,20 @@ export function GalleryGrid({
 }: GalleryGridProps) {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [likedPhotos, setLikedPhotos] = useState<Set<string>>(new Set());
+  const detailTriggerRef = useRef<HTMLButtonElement | null>(null);
 
   // Filter photos based on selected tags and search query
   const filteredPhotos = mockPhotos.filter(photo => {
     // Filter by tags
-    const matchesTags = selectedTags.length === 0 || 
+    const matchesTags = selectedTags.length === 0 ||
       selectedTags.some(tag => photo.tags.includes(tag.toLowerCase()));
-    
+
     // Filter by search query
     const matchesSearch = searchQuery === "" ||
       photo.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       photo.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (photo.photographer && photo.photographer.toLowerCase().includes(searchQuery.toLowerCase()));
-    
+
     return matchesTags && matchesSearch;
   });
 
@@ -78,7 +80,7 @@ export function GalleryGrid({
             {/* Photo Container */}
             <div className="relative aspect-[4/3] overflow-hidden">
               {/* Placeholder colored rectangles since we don't have actual images */}
-              <div 
+              <div
                 className={`w-full h-full ${
                   index % 6 === 0 ? 'bg-gradient-to-br from-blue-400 to-blue-600' :
                   index % 6 === 1 ? 'bg-gradient-to-br from-green-400 to-green-600' :
@@ -88,13 +90,18 @@ export function GalleryGrid({
                   'bg-gradient-to-br from-red-400 to-red-600'
                 }`}
               />
-              
+
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300">
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 group-focus-within:bg-black/20 transition-all duration-300">
+                <div className="absolute inset-0 flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 transition-opacity duration-300">
                   <button
-                    onClick={() => setSelectedPhoto(photo)}
-                    className="btn-secondary"
+                    onClick={(event) => {
+                      detailTriggerRef.current = event.currentTarget;
+                      setSelectedPhoto(photo);
+                    }}
+                    aria-label={`View details for ${photo.title}`}
+                    aria-haspopup="dialog"
+                    className="btn-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   >
                     View Details
                   </button>
@@ -102,10 +109,13 @@ export function GalleryGrid({
               </div>
 
               {/* Action Buttons */}
-              <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute top-3 right-3 flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 transition-opacity duration-300">
                 <button
                   onClick={() => toggleLike(photo.id)}
-                  className={`p-2 rounded-full backdrop-blur-sm transition-colors ${
+                  aria-label={`Like ${photo.title}`}
+                  aria-pressed={likedPhotos.has(photo.id)}
+                  title={likedPhotos.has(photo.id) ? 'Unlike photo' : 'Like photo'}
+                  className={`p-2 rounded-full backdrop-blur-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
                     likedPhotos.has(photo.id)
                       ? 'bg-red-500 text-white'
                       : 'bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
@@ -113,10 +123,10 @@ export function GalleryGrid({
                 >
                   <Heart className={`h-4 w-4 ${likedPhotos.has(photo.id) ? 'fill-current' : ''}`} />
                 </button>
-                <button className="p-2 rounded-full bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 backdrop-blur-sm transition-colors">
+                <button aria-label={`Download ${photo.title}`} title="Download photo" className="p-2 rounded-full bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 backdrop-blur-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                   <Download className="h-4 w-4" />
                 </button>
-                <button className="p-2 rounded-full bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 backdrop-blur-sm transition-colors">
+                <button aria-label={`Share ${photo.title}`} title="Share photo" className="p-2 rounded-full bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 backdrop-blur-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                   <Share2 className="h-4 w-4" />
                 </button>
               </div>
@@ -127,7 +137,7 @@ export function GalleryGrid({
               <h3 className="font-semibold text-slate-900 dark:text-white mb-2 truncate">
                 {photo.title}
               </h3>
-              
+
               {/* Tags */}
               <div className="flex flex-wrap gap-1 mb-3">
                 {photo.tags.slice(0, 3).map(tag => (
@@ -185,8 +195,8 @@ export function GalleryGrid({
             {selectedTags.length > 0 || searchQuery ? 'No photos match your filters' : 'No photos yet'}
           </h3>
           <p className="text-slate-500 dark:text-slate-400">
-            {selectedTags.length > 0 || searchQuery 
-              ? 'Try adjusting your search terms or selected tags' 
+            {selectedTags.length > 0 || searchQuery
+              ? 'Try adjusting your search terms or selected tags'
               : 'Upload your first photos to get started'
             }
           </p>
@@ -199,7 +209,8 @@ export function GalleryGrid({
           <button
             onClick={onLoadMore}
             disabled={isLoading}
-            className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-busy={isLoading}
+            className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             {isLoading ? 'Loading...' : 'Load More Photos'}
           </button>
@@ -210,26 +221,38 @@ export function GalleryGrid({
       )}
 
       {/* Photo Detail Modal - Placeholder for future implementation */}
-      {selectedPhoto && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+      <Dialog.Root open={selectedPhoto !== null} onOpenChange={(open) => {
+        if (!open) setSelectedPhoto(null);
+      }}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/80 z-50" />
+          <Dialog.Content
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              detailTriggerRef.current?.focus();
+            }}
+            className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 rounded-xl max-w-4xl w-[calc(100%-2rem)] max-h-[90vh] overflow-auto"
+          >
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold">{selectedPhoto.title}</h2>
-                <button
-                  onClick={() => setSelectedPhoto(null)}
-                  className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                >
-                  ✕
-                </button>
+                <Dialog.Title className="text-2xl font-bold break-words min-w-0">{selectedPhoto?.title}</Dialog.Title>
+                <Dialog.Close asChild>
+                  <button
+                    aria-label="Close photo details"
+                    title="Close photo details"
+                    className="shrink-0 p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </Dialog.Close>
               </div>
-              <p className="text-slate-600 dark:text-slate-400">
+              <Dialog.Description className="text-slate-600 dark:text-slate-400">
                 Photo details and larger view would be implemented here.
-              </p>
+              </Dialog.Description>
             </div>
-          </div>
-        </div>
-      )}
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   );
 }

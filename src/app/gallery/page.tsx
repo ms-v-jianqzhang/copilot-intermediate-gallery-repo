@@ -13,6 +13,7 @@ export default function GalleryPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const filterRef = useRef<HTMLDivElement>(null);
+  const filterButtonRef = useRef<HTMLButtonElement>(null);
 
   // Close filter dropdown when clicking outside
   useEffect(() => {
@@ -30,17 +31,17 @@ export default function GalleryPage() {
 
   const handleLoadMore = async () => {
     setIsLoading(true);
-    
+
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     setCurrentPage(prev => prev + 1);
     setIsLoading(false);
   };
 
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
@@ -51,6 +52,7 @@ export default function GalleryPage() {
   const clearAllTags = () => {
     setSelectedTags([]);
     setCurrentPage(1);
+    filterButtonRef.current?.focus();
   };
 
   // Reset page when search changes
@@ -60,7 +62,7 @@ export default function GalleryPage() {
   };
   return (
     <div className="page-gradient">
-      <Hero 
+      <Hero
         title="Photo Gallery"
         description="Browse and discover amazing photography"
       />
@@ -86,10 +88,28 @@ export default function GalleryPage() {
 
             {/* Filter Controls */}
             <div className="flex items-center gap-4">
-              <div className="relative" ref={filterRef}>
-                <button 
+              <div
+                className="relative"
+                ref={filterRef}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape' && isFilterOpen) {
+                    event.preventDefault();
+                    setIsFilterOpen(false);
+                    filterButtonRef.current?.focus();
+                  }
+                }}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget)) {
+                    setIsFilterOpen(false);
+                  }
+                }}
+              >
+                <button
+                  ref={filterButtonRef}
                   onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className="btn-secondary flex items-center gap-2"
+                  aria-expanded={isFilterOpen}
+                  aria-controls="gallery-filters"
+                  className="btn-secondary flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 >
                   <Filter className="h-4 w-4" />
                   Filters
@@ -100,23 +120,23 @@ export default function GalleryPage() {
                   )}
                   <ChevronDown className={`h-4 w-4 transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} />
                 </button>
-                
+
                 {/* Filter Dropdown */}
                 {isFilterOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-80 card-base border border-slate-300 dark:border-slate-600 shadow-lg z-10">
+                  <div id="gallery-filters" className="absolute top-full left-0 mt-2 w-80 max-w-[calc(100vw-3rem)] card-base border border-slate-300 dark:border-slate-600 shadow-lg z-10">
                     <div className="p-4">
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="font-medium text-slate-900 dark:text-white">Filter by Tags</h3>
                         {selectedTags.length > 0 && (
                           <button
                             onClick={clearAllTags}
-                            className="nav-link-active text-sm"
+                            className="nav-link-active text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                           >
                             Clear all
                           </button>
                         )}
                       </div>
-                      
+
                       <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
                         {AVAILABLE_TAGS.map(tag => (
                           <label
@@ -127,7 +147,7 @@ export default function GalleryPage() {
                               type="checkbox"
                               checked={selectedTags.includes(tag)}
                               onChange={() => toggleTag(tag)}
-                              className="rounded border-slate-300 text-blue-500 focus:ring-blue-500"
+                              className="rounded border-slate-300 text-blue-500 focus:ring-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                             />
                             <span className="text-sm text-slate-700 dark:text-slate-300 capitalize">
                               {tag}
@@ -139,12 +159,12 @@ export default function GalleryPage() {
                   </div>
                 )}
               </div>
-              
+
               <div className="flex border border-slate-300 dark:border-slate-600 rounded-lg overflow-hidden">
-                <button className="p-2 bg-blue-500 text-white">
+                <button aria-label="Grid view" aria-pressed={true} title="Grid view" className="p-2 bg-blue-500 text-white focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600">
                   <Grid className="h-4 w-4" />
                 </button>
-                <button className="p-2 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600">
+                <button aria-label="List view" aria-pressed={false} title="List view" className="p-2 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600">
                   <List className="h-4 w-4" />
                 </button>
               </div>
@@ -167,8 +187,13 @@ export default function GalleryPage() {
                   >
                     {tag}
                     <button
-                      onClick={() => toggleTag(tag)}
-                      className="hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5"
+                      onClick={() => {
+                        filterButtonRef.current?.focus();
+                        toggleTag(tag);
+                      }}
+                      aria-label={`Remove ${tag} filter`}
+                      title={`Remove ${tag} filter`}
+                      className="hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -183,7 +208,7 @@ export default function GalleryPage() {
       <SectionContainer>
         <SectionTitle title="Gallery" />
         {/* Gallery Grid */}
-        <GalleryGrid 
+        <GalleryGrid
           limit={6}
           currentPage={currentPage}
           onLoadMore={handleLoadMore}

@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} antialiased`}
       >
@@ -49,7 +49,20 @@ export default function RootLayout({
           </div>
         </header>
         {children}
-        {/* REPLACE THIS COMMENT */}
+      {/* Create a footer for this section. It should contain the logo and copyright information. */}
+        <footer className="border-t bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm py-4 mt-8">
+          <div className="container mx-auto px-4 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2">
+              <Camera className="h-6 w-6 text-blue-600" />
+              <span className="text-lg font-bold text-slate-900 dark:text-white">
+                Portfolio Gallery 3
+              </span>
+            </Link>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              &copy; {new Date().getFullYear()} Portfolio Gallery. All rights reserved.
+            </p>
+          </div>
+        </footer>
       </body>
     </html>
   );

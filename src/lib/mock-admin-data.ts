@@ -1,4 +1,5 @@
 import { FolderOpen, Users, BarChart3 } from "lucide-react";
+import type { GalleryRow } from "@/components/ui/layout/GalleriesTable";
 
 type StatColor = 'blue' | 'green' | 'purple' | 'orange';
 
@@ -9,7 +10,7 @@ export const dashboardStats = [
     { label: "This Month Views", value: "45,678", icon: BarChart3, color: 'orange' as StatColor },
 ];
 
-export const recentGalleries = [
+export const recentGalleries: GalleryRow[] = [
     {
         id: 1,
         name: "Wedding - Sarah & John",

@@ -109,5 +109,38 @@ export const mockPhotos: Photo[] = [
     views: 4321,
     photographer: 'Tom Anderson',
     dateTaken: '2023-12-20'
+  },
+  {
+    id: '10',
+    url: '/placeholder-10.jpg',
+    title: 'Coastal Cliff Sunrise',
+    tags: ['landscape', 'sunrise', 'coast', 'nature'],
+    likes: 342,
+    downloads: 128,
+    views: 3187,
+    photographer: 'Rachel Green',
+    dateTaken: '2026-10-18'
+  },
+  {
+    id: '11',
+    url: '/placeholder-11.jpg',
+    title: 'Studio Fashion Portrait',
+    tags: ['portrait', 'studio', 'fashion', 'professional'],
+    likes: 215,
+    downloads: 74,
+    views: 1962,
+    photographer: 'Marcus Lee',
+    dateTaken: '2026-09-12'
+  },
+  {
+    id: '12',
+    url: '/placeholder-12.jpg',
+    title: 'Glass Skyscraper Geometry',
+    tags: ['architecture', 'building', 'city', 'abstract'],
+    likes: 167,
+    downloads: 59,
+    views: 1428,
+    photographer: 'Priya Patel',
+    dateTaken: '2026-07-26'
   }
 ];
